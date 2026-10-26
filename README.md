@@ -14,19 +14,19 @@ secrets only for the features you actually turn on.
 
 ## Stack
 
-| Concern       | Choice                                                       |
-| ------------- | ------------------------------------------------------------ |
-| Runtime / PM  | [Bun](https://bun.sh) (never npm/npx/yarn)                   |
-| Framework     | SvelteKit + Svelte 5 (runes only)                            |
-| Language      | TypeScript 6 (pinned; type-checked on TS 7 / tsgo)           |
-| Styling       | Tailwind CSS v4 + [shadcn-svelte](https://shadcn-svelte.com) |
-| ORM / DB      | Prisma 7 + PostgreSQL                                        |
-| Auth          | [Better Auth](https://better-auth.com)                       |
-| Email         | [Resend](https://resend.com)                                 |
-| Analytics     | [Umami](https://umami.is) Cloud                              |
-| Lint / format | [oxlint](https://oxc.rs) + [oxfmt](https://oxc.rs) (strict)  |
-| Tests         | Vitest (unit) + Playwright (e2e)                             |
-| Deploy        | Railway (adapter-node + Dockerfile); Netlify documented too  |
+| Concern       | Choice                                                                                                                                                                             |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Runtime / PM  | [Bun](https://bun.sh) (never npm/npx/yarn)                                                                                                                                         |
+| Framework     | SvelteKit + Svelte 5 (runes only)                                                                                                                                                  |
+| Language      | TypeScript 6 (pinned; type-checked on TS 7 / tsgo)                                                                                                                                 |
+| Styling       | Tailwind CSS v4 + [shadcn-svelte](https://shadcn-svelte.com)                                                                                                                       |
+| ORM / DB      | Prisma 7 + PostgreSQL                                                                                                                                                              |
+| Auth          | [Better Auth](https://better-auth.com)                                                                                                                                             |
+| Email         | [Resend](https://resend.com)                                                                                                                                                       |
+| Analytics     | [Umami](https://umami.is) Cloud                                                                                                                                                    |
+| Lint / format | [oxlint-config](https://github.com/himynameisdave/oxlint-config) + [oxfmt-config](https://github.com/himynameisdave/oxfmt-config), run by [`bun fmt`](https://bun.com/docs/format) |
+| Tests         | Vitest (unit) + Playwright (e2e)                                                                                                                                                   |
+| Deploy        | Railway (adapter-node + Dockerfile); Netlify documented too                                                                                                                        |
 
 ## Quick start
 
@@ -269,12 +269,13 @@ Lint and format are **oxlint + oxfmt** (not ESLint/Prettier). Lint rules come fr
 [`@himynameisdave/oxlint-config`](https://github.com/himynameisdave/oxlint-config), extended in
 `oxlint.config.ts` with a handful of justified project-local deltas. Format rules come from
 [`@himynameisdave/oxfmt-config`](https://github.com/himynameisdave/oxfmt-config), spread in
-`oxfmt.config.ts` (oxfmt has no `extends`). oxfmt owns everything including `.svelte`, `.md`, and
-`.json`; indentation is **2 spaces**, single quotes, printWidth 109 (`oxfmt.config.ts`).
+`oxfmt.config.ts` (oxfmt has no `extends`), and are run by [`bun fmt`](https://bun.com/docs/format).
+It formats everything including `.svelte`, `.md`, and `.json`; indentation is **2 spaces**,
+single quotes, printWidth 109 (`oxfmt.config.ts`).
 
 Git hooks are installed by `bun install` (the `prepare` step runs Husky):
 
-- **pre-commit** — oxfmt on staged files, oxlint with zero tolerated warnings, plus a garbage
+- **pre-commit** — `bun fmt` on staged files, oxlint with zero tolerated warnings, plus a garbage
   blocker (`scripts/check-staged.ts`) that rejects `.only`/`.skip`, `debugger`, conflict markers,
   stray `console.log`, and accidental `.env*` files.
 - **commit-msg** — enforces the **emoji-commit** format.
@@ -376,7 +377,7 @@ Route groups: `(marketing)` public · `(auth)` for signed-out flows (redirect aw
 | `bun run check`        | Type-check (svelte-check on tsgo / TS 7)         |
 | `bun run lint`         | oxlint (zero warnings tolerated)                 |
 | `bun run lint:fix`     | oxlint with autofix                              |
-| `bun run format`       | Format with oxfmt                                |
+| `bun run format`       | Format with `bun fmt` (reads `oxfmt.config.ts`)  |
 | `bun run format:check` | Verify formatting                                |
 | `bun run test`         | Unit tests (Vitest)                              |
 | `bun run test:e2e`     | End-to-end tests (Playwright)                    |
